@@ -1,0 +1,125 @@
+<div class="page-container">
+
+  <div class="card">
+    <h2>{{ editando ? 'Editar Fornecedor' : 'Cadastro de Fornecedor' }}</h2>
+
+    <form (ngSubmit)="salvarFornecedor()">
+
+      <div class="form-grid">
+        <input type="text" placeholder="Nome"
+               [(ngModel)]="fornecedorForm.nome"
+               name="nome" required>
+
+        <input type="text" placeholder="CPF/CNPJ"
+               [(ngModel)]="fornecedorForm.cpfCnpj"
+               name="cpfCnpj" required>
+
+        <input type="text" placeholder="RG"
+               [(ngModel)]="fornecedorForm.rg"
+               name="rg">
+
+        <input type="date"
+               [(ngModel)]="fornecedorForm.dataNascimento"
+               name="dataNascimento">
+
+        <input type="email" placeholder="Email"
+               [(ngModel)]="fornecedorForm.email"
+               name="email" required>
+
+        <input type="text" placeholder="CEP"
+               [(ngModel)]="fornecedorForm.cep"
+               name="cep"
+               (blur)="validarCep()"
+               required>
+      </div>
+
+      <div class="dropdown-container">
+        <button type="button" (click)="dropdownAberto = !dropdownAberto">
+          Selecionar Empresas ({{ fornecedorForm.empresas.length }})
+        </button>
+
+        <div class="dropdown-list" *ngIf="dropdownAberto">
+          <div *ngFor="let e of empresas">
+            <label>
+              <input type="checkbox"
+                     [checked]="isEmpresaSelecionada(e.id)"
+                     (change)="toggleEmpresa(e.id)">
+              {{ e.nomeFantasia }}
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="button-group">
+        <button type="submit" class="btn-primary">
+          {{ editando ? 'Atualizar' : 'Salvar' }}
+        </button>
+
+        <button type="button"
+                class="btn-secondary"
+                *ngIf="editando"
+                (click)="resetForm()">
+          Cancelar
+        </button>
+      </div>
+
+    </form>
+  </div>
+
+  <div class="card">
+    <h2>Lista de Fornecedores</h2>
+
+    <div class="filtro-container">
+      <input type="text"
+             placeholder="Filtrar por Nome"
+             [(ngModel)]="filtroNome">
+
+      <input type="text"
+             placeholder="Filtrar por CPF/CNPJ"
+             [(ngModel)]="filtroCpfCnpj">
+
+      <button (click)="aplicarFiltro()" class="btn-primary">
+        Filtrar
+      </button>
+
+      <button (click)="limparFiltro()" class="btn-secondary">
+        Limpar
+      </button>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>CPF/CNPJ</th>
+          <th>Email</th>
+          <th>CEP</th>
+          <th>N° Empresas</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let f of fornecedoresFiltrados">
+          <td>{{ f.nome }}</td>
+          <td>{{ f.cpfCnpj }}</td>
+          <td>{{ f.email }}</td>
+          <td>{{ f.cep }}</td>
+          <td>{{ empresasSelecionadas(f) }}</td>
+          <td>
+            <button class="btn-edit"
+                    (click)="editarFornecedor(f)">
+              Editar
+            </button>
+
+            <button class="btn-delete"
+                    (click)="excluirFornecedor(f.id)">
+              Excluir
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+
+</div>

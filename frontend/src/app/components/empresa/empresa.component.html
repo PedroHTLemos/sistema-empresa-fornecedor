@@ -1,0 +1,67 @@
+<div class="page-container">
+
+  <div class="card">
+    <h2>{{ editando ? 'Editar Empresa' : 'Cadastro de Empresa' }}</h2>
+
+    <form (ngSubmit)="salvarEmpresa()">
+
+      <div class="form-grid">
+        <input type="text" placeholder="Nome Fantasia" [(ngModel)]="empresaForm.nomeFantasia" name="nomeFantasia" required>
+        <input type="text" placeholder="CNPJ" [(ngModel)]="empresaForm.cnpj" name="cnpj" required>
+        <input type="text" placeholder="CEP" [(ngModel)]="empresaForm.cep" name="cep" required>
+      </div>
+
+      <div class="dropdown-container">
+        <button type="button" (click)="dropdownAberto = !dropdownAberto">
+          Selecionar Fornecedores ({{ empresaForm.fornecedores.length }})
+        </button>
+        <div class="dropdown-list" *ngIf="dropdownAberto">
+          <div *ngFor="let f of fornecedores">
+            <label>
+              <input type="checkbox"
+                     [checked]="empresaForm.fornecedores.includes(f.id)"
+                     (change)="toggleFornecedor(f.id)">
+              {{ f.nome }}
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="button-group">
+        <button type="submit" class="btn-primary">
+          {{ editando ? 'Atualizar' : 'Salvar' }}
+        </button>
+        <button type="button" class="btn-secondary" *ngIf="editando" (click)="resetForm()">Cancelar</button>
+      </div>
+
+    </form>
+  </div>
+
+  <div class="card">
+    <h2>Lista de Empresas</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Nome Fantasia</th>
+          <th>CNPJ</th>
+          <th>CEP</th>
+          <th>N° Fornecedores</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let e of empresas">
+          <td>{{ e.nomeFantasia }}</td>
+          <td>{{ e.cnpj }}</td>
+          <td>{{ e.cep }}</td>
+          <td>{{ e.fornecedores?.length || 0 }}</td>
+          <td>
+            <button class="btn-edit" (click)="editarEmpresa(e)">Editar</button>
+            <button class="btn-delete" (click)="excluirEmpresa(e.id)">Excluir</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>

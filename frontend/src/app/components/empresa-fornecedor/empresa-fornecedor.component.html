@@ -1,0 +1,81 @@
+<div class="page-container">
+
+  <div class="card">
+    <h2>Pesquisar por Empresa</h2>
+
+    <div *ngIf="carregandoEmpresas">
+      <p>Carregando empresas...</p>
+    </div>
+
+    <div *ngIf="!carregandoEmpresas && empresas.length === 0">
+      <p>Nenhuma empresa encontrada.</p>
+    </div>
+
+    <div *ngIf="!carregandoEmpresas && empresas.length > 0">
+      <select [(ngModel)]="empresaSelecionadaId"
+              (ngModelChange)="selecionarEmpresaPorId($event)">
+        <option [ngValue]="null">-- Selecionar --</option>
+        <option *ngFor="let e of empresas" [ngValue]="e.id">
+          {{ e.nomeFantasia }}
+        </option>
+      </select>
+    </div>
+
+    <div *ngIf="empresaSelecionada">
+      <h3>
+        Fornecedores da Empresa:
+        {{ empresaSelecionada.nomeFantasia }}
+      </h3>
+
+      <ul *ngIf="empresaSelecionada.fornecedores?.length > 0">
+        <li *ngFor="let f of empresaSelecionada.fornecedores">
+          {{ f.nome }} - {{ f.cpfCnpj }}
+        </li>
+      </ul>
+
+      <p *ngIf="empresaSelecionada.fornecedores?.length === 0">
+        Nenhum fornecedor vinculado.
+      </p>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top: 20px;">
+    <h2>Pesquisar por Fornecedor</h2>
+
+    <div *ngIf="carregandoFornecedores">
+      <p>Carregando fornecedores...</p>
+    </div>
+
+    <div *ngIf="!carregandoFornecedores && fornecedores.length === 0">
+      <p>Nenhum fornecedor encontrado.</p>
+    </div>
+
+    <div *ngIf="!carregandoFornecedores && fornecedores.length > 0">
+      <select [(ngModel)]="fornecedorSelecionadoId"
+              (ngModelChange)="selecionarFornecedorPorId($event)">
+        <option [ngValue]="null">-- Selecionar --</option>
+        <option *ngFor="let f of fornecedores" [ngValue]="f.id">
+          {{ f.nome }}
+        </option>
+      </select>
+    </div>
+
+    <div *ngIf="fornecedorSelecionado">
+      <h3>
+        Empresas do Fornecedor:
+        {{ fornecedorSelecionado.nome }}
+      </h3>
+
+      <ul *ngIf="fornecedorSelecionado.empresas?.length > 0">
+        <li *ngFor="let e of fornecedorSelecionado.empresas">
+          {{ e.nomeFantasia }} - {{ e.cnpj }}
+        </li>
+      </ul>
+
+      <p *ngIf="fornecedorSelecionado.empresas?.length === 0">
+        Nenhuma empresa vinculada.
+      </p>
+    </div>
+  </div>
+
+</div>
